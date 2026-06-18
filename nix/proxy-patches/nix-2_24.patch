@@ -1,0 +1,25 @@
+From e385cadec43e625fdc156385d8e3ee6b3f796e86 Mon Sep 17 00:00:00 2001
+From: Brian Olsen <brian@maven-group.org>
+Date: Tue, 22 Apr 2025 02:00:21 +0200
+Subject: [PATCH] Get NAR from store in daemon
+
+---
+ src/libstore/daemon.cc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/libstore/daemon.cc b/src/libstore/daemon.cc
+index 9002a89bc..652bca4af 100644
+--- a/src/libstore/daemon.cc
++++ b/src/libstore/daemon.cc
+@@ -888,7 +888,7 @@ static void performOp(TunnelLogger * logger, ref<Store> store,
+         auto path = store->parseStorePath(readString(conn.from));
+         logger->startWork();
+         logger->stopWork();
+-        dumpPath(store->toRealPath(path), conn.to);
++        store->narFromPath(path, conn.to);
+         break;
+     }
+ 
+-- 
+2.47.2
+

@@ -1,0 +1,74 @@
+From 14c7bc0ff4267f2417515296af2857e32ba7c370 Mon Sep 17 00:00:00 2001
+From: Brian Olsen <brian@maven-group.org>
+Date: Mon, 21 Apr 2025 21:26:57 +0200
+Subject: [PATCH] Add process-ops argument to nix-daemon
+
+---
+ src/libstore/ssh-store.cc    | 4 +++-
+ src/nix-daemon/nix-daemon.cc | 7 +++++--
+ 2 files changed, 8 insertions(+), 3 deletions(-)
+
+diff --git a/src/libstore/ssh-store.cc b/src/libstore/ssh-store.cc
+index 7800968f1..fc73aaa5b 100644
+--- a/src/libstore/ssh-store.cc
++++ b/src/libstore/ssh-store.cc
+@@ -17,6 +17,7 @@ public:
+     const Setting<Path> sshKey{(Store*) this, "", "ssh-key", "path to an SSH private key"};
+     const Setting<std::string> sshPublicHostKey{(Store*) this, "", "base64-ssh-public-host-key", "The public half of the host's SSH key"};
+     const Setting<bool> compress{(Store*) this, false, "compress", "whether to compress the connection"};
++    const Setting<Path> remoteProgram{(Store*) this, "nix-daemon", "remote-program", "path to the nix-daemon executable on the remote system"};
+ 
+     SSHStore(const std::string & host, const Params & params)
+         : Store(params)
+@@ -84,7 +85,8 @@ ref<FSAccessor> SSHStore::getFSAccessor()
+ ref<RemoteStore::Connection> SSHStore::openConnection()
+ {
+     auto conn = make_ref<Connection>();
+-    conn->sshConn = master.startCommand("nix-daemon --stdio");
++
++    conn->sshConn = master.startCommand(fmt("%s --stdio", remoteProgram));
+     conn->to = FdSink(conn->sshConn->in.get());
+     conn->from = FdSource(conn->sshConn->out.get());
+     initConnection(*conn);
+diff --git a/src/nix-daemon/nix-daemon.cc b/src/nix-daemon/nix-daemon.cc
+index 87ad4e949..6cb902d9b 100644
+--- a/src/nix-daemon/nix-daemon.cc
++++ b/src/nix-daemon/nix-daemon.cc
+@@ -683,7 +683,7 @@ static void performOp(TunnelLogger * logger, ref<Store> store,
+         auto path = readStorePath(*store, from);
+         logger->startWork();
+         logger->stopWork();
+-        dumpPath(path, to);
++        store->narFromPath(path, to);
+         break;
+     }
+ 
+@@ -1078,6 +1078,7 @@ static int _main(int argc, char * * argv)
+ {
+     {
+         auto stdio = false;
++        auto processOps = false;
+ 
+         parseCmdLine(argc, argv, [&](Strings::iterator & arg, const Strings::iterator & end) {
+             if (*arg == "--daemon")
+@@ -1088,6 +1089,8 @@ static int _main(int argc, char * * argv)
+                 printVersion("nix-daemon");
+             else if (*arg == "--stdio")
+                 stdio = true;
++            else if (*arg == "--process-ops")
++                processOps = true;
+             else return false;
+             return true;
+         });
+@@ -1095,7 +1098,7 @@ static int _main(int argc, char * * argv)
+         initPlugins();
+ 
+         if (stdio) {
+-            if (getStoreType() == tDaemon) {
++            if (!processOps && getStoreType() == tDaemon) {
+                 /* Forward on this connection to the real daemon */
+                 auto socketPath = settings.nixDaemonSocketFile;
+                 auto s = socket(PF_UNIX, SOCK_STREAM, 0);
+-- 
+2.47.2
+
