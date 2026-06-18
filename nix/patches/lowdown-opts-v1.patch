@@ -1,0 +1,39 @@
+Adapt lowdown opts struct initialization for lowdown >= 3.0.0 (nix 2.4–2.8)
+
+lowdown 3.0.0 moved the terminal-output fields (cols, hmargin, vmargin) out of
+the top-level struct lowdown_opts and into a nested struct lowdown_opts_term
+stored inside an anonymous union member (opts.term). C++20 designated
+initializers cannot initialize fields inside anonymous union members (CWG 1850),
+so the original brace-initialization syntax no longer compiles.
+
+This patch rewrites the initialization using explicit assignment statements,
+which are compatible with both the old and new struct layouts.
+
+Applies to nix 2.4–2.8, which use the simple getWindowSize().second style.
+
+--- a/src/libcmd/markdown.cc
++++ b/src/libcmd/markdown.cc
+@@ -9,15 +9,14 @@
+
+ std::string renderMarkdownToTerminal(std::string_view markdown)
+ {
+-    struct lowdown_opts opts {
+-        .type = LOWDOWN_TERM,
+-        .maxdepth = 20,
+-        .cols = std::max(getWindowSize().second, (unsigned short) 80),
+-        .hmargin = 0,
+-        .vmargin = 0,
+-        .feat = LOWDOWN_COMMONMARK | LOWDOWN_FENCED | LOWDOWN_DEFLIST | LOWDOWN_TABLES,
+-        .oflags = 0,
+-    };
++    struct lowdown_opts_term opts_term = {};
++    opts_term.cols = std::max(getWindowSize().second, (unsigned short) 80);
++    struct lowdown_opts opts = {};
++    opts.type = LOWDOWN_TERM;
++    opts.term = opts_term;
++    opts.maxdepth = 20;
++    opts.feat = LOWDOWN_COMMONMARK | LOWDOWN_FENCED | LOWDOWN_DEFLIST | LOWDOWN_TABLES;
++    opts.oflags = 0;
+
+     auto doc = lowdown_doc_new(&opts);
+     if (!doc)
