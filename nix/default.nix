@@ -164,6 +164,7 @@ in {
     hash = "sha256-jBz2Ub65eFYG+aWgSI3AJYvLSghio77fWQiIW1svA9U=";
     patches = [
       patch-monitorfdhup
+      ./patches/nix-2.3-boost-system.patch
     ];
     self_attribute_name = "nix_2_3";
     maintainers = with lib.maintainers; [ flokli ];

@@ -169,7 +169,11 @@ self = stdenv.mkDerivation {
     # https://github.com/NixOS/nixpkgs/issues/45462
     lib.optionalString (!enableStatic) ''
       mkdir -p $out/lib
-      cp -pd ${boost}/lib/{libboost_context*,libboost_thread*,libboost_system*} $out/lib
+      cp -pd ${boost}/lib/{libboost_context*,libboost_thread*} $out/lib
+      # libboost_system was removed as a separate library in Boost >= 1.89.0
+      for f in ${boost}/lib/libboost_system*; do
+        [ -e "$f" ] && cp -pd "$f" $out/lib || true
+      done
       rm -f $out/lib/*.a
       ${lib.optionalString stdenv.hostPlatform.isLinux ''
         chmod u+w $out/lib/*.so.*

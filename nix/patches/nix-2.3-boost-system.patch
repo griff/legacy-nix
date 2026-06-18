@@ -1,0 +1,18 @@
+Drop -lboost_system from link flags (Boost >= 1.89.0)
+
+boost::system has been header-only since Boost 1.69. Its shared library
+(libboost_system.so / libboost_system.dylib) was removed entirely in
+Boost 1.89.0. Nothing in nix 2.3.x uses symbols from boost::system
+directly, so the -lboost_system linker flag is unnecessary and causes
+build failures against Boost >= 1.89.
+
+--- a/src/nix/local.mk
++++ b/src/nix/local.mk
+@@ -15,6 +15,6 @@ nix_SOURCES := \
+
+ nix_LIBS = libexpr libmain libstore libutil
+
+-nix_LDFLAGS = -pthread $(SODIUM_LIBS) $(EDITLINE_LIBS) $(BOOST_LDFLAGS) -lboost_context -lboost_thread -lboost_system
++nix_LDFLAGS = -pthread $(SODIUM_LIBS) $(EDITLINE_LIBS) $(BOOST_LDFLAGS) -lboost_context -lboost_thread
+
+ $(foreach name, \
