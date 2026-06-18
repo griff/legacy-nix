@@ -237,10 +237,9 @@ in {
     self_attribute_name = "nix_2_9";
   };
 
-# 2.10.3
   nix_2_10 = common {
-    version = "2.10.2";
-    hash = "sha256-/8zlkXoZEZd+LgJq5xw8h+u2STqeKLrGTARZklE3CP8=";
+    version = "2.10.3";
+    hash = "sha256-B9EyDUz/9tlcWwf24lwxCFmkxuPTVW7HFYvp0C4xGbc=";
     patches = [
       ./patches/flaky-tests.patch
     ];
@@ -248,13 +247,68 @@ in {
     self_attribute_name = "nix_2_10";
   };
 
-  # 2.11.1
-  # 2.12.1
-  # 2.13.6
-  # 2.14.1
-  # 2.15.3
-  # 2.16.3
-  # 2.17.2
+  nix_2_11 = common {
+    version = "2.11.1";
+    hash = "sha256-qCV65kw09AG+EkdchDPq7RoeBznX0Q6Qa4yzPqobdOk=";
+    patches = [
+      ./patches/flaky-tests.patch
+    ];
+    self_attribute_name = "nix_2_11";
+  };
+
+  nix_2_12 = common {
+    version = "2.12.1";
+    hash = "sha256-GmHKhq0uFtdOiJnuBwj2YwlZjvh6YTkfQZgeu4e0dLU=";
+    patches = [
+      ./patches/flaky-tests.patch
+    ];
+    self_attribute_name = "nix_2_12";
+  };
+
+  nix_2_13 = common {
+    version = "2.13.6";
+    hash = "sha256-pd2yGmHWn4njfbrSP6cMJx8qL+yeGieqcbLNICzcRFs=";
+    patches = [
+      ./patches/flaky-tests.patch
+    ];
+    self_attribute_name = "nix_2_13";
+  };
+
+  nix_2_14 = common {
+    version = "2.14.1";
+    hash = "sha256-5aCmGZbsFcLIckCDfvnPD4clGPQI7qYAqHYlttN/Wkg=";
+    patches = [
+      ./patches/flaky-tests.patch
+    ];
+    self_attribute_name = "nix_2_14";
+  };
+
+  nix_2_15 = common {
+    version = "2.15.3";
+    hash = "sha256-sfFXbjC5iIdSAbctZIuFozxX0uux/KFBNr9oh33xINs=";
+    patches = [
+      ./patches/flaky-tests.patch
+    ];
+    self_attribute_name = "nix_2_15";
+  };
+
+  nix_2_16 = common {
+    version = "2.16.3";
+    hash = "sha256-/tnjRCk+VaWPThzdn3C0zU1AMON+7AFsHgTTzErFxV4=";
+    patches = [
+      ./patches/flaky-tests.patch
+    ];
+    self_attribute_name = "nix_2_16";
+  };
+
+  nix_2_17 = common {
+    version = "2.17.2";
+    hash = "sha256-D5dgV4B7y5tD+nPU0Yus+R9nqgAelvm8imEeFzITLJA=";
+    patches = [
+      ./patches/flaky-tests.patch
+    ];
+    self_attribute_name = "nix_2_17";
+  };
 
   nix_2_18 = common {
     version = "2.18.9";
@@ -304,12 +358,80 @@ in {
     self_attribute_name = "nix_2_23";
   };
 
-  # 2.24.14
   nix_2_24 = common {
-    version = "2.24.14";
-    hash = "sha256-SthMCsj6POjawLnJq9+lj/UzObX9skaeN1UGmMZiwTY=";
+    version = "2.24.15";
+    hash = "sha256-GHqFHLxvRID2IEPUwIfRMp8epYQMFcvG9ogLzfWRbPc=";
     patches = [];
     self_attribute_name = "nix_2_24";
   };
 
+  nix_2_25 = common {
+    version = "2.25.5";
+    hash = "sha256-9xrQhrqHCSqWsQveykZvG/ZMu0se66fUQw3xVSg6BpQ=";
+    patches = [];
+    self_attribute_name = "nix_2_25";
+  };
+
+  nix_2_26 = common {
+    version = "2.26.4";
+    hash = "sha256-WmGMiwwC9RLomNtpDeRoe5bqBAH84A6pLcqi1MbcQi4=";
+    patches = [];
+    self_attribute_name = "nix_2_26";
+  };
+
+  nix_2_27 = common {
+    version = "2.27.1";
+    hash = "sha256-rBPulEBpn4IiqkPsetuh7BRzT2iGCzZYnogTAsbrvhU=";
+    patches = [];
+    self_attribute_name = "nix_2_27";
+  };
+
+  nix_2_28 = common {
+    version = "2.28.7";
+    hash = "sha256-Fq4+7uYz6bdE1HvPqn+qZcYX1rNilVKT7YAAPLA8170=";
+    patches = [];
+    self_attribute_name = "nix_2_28";
+  };
+
+  nix_2_29 = common {
+    version = "2.29.4";
+    hash = "sha256-eVELGOeQg37AZLu7xnsaW9VA4fBr3x1d97I0iAoIt8A=";
+    patches = [];
+    self_attribute_name = "nix_2_29";
+  };
+
+  nix_2_30 = common {
+    version = "2.30.5";
+    hash = "sha256-tGiV71RxtCNcUNX86ZwmOIghG4pLwm5nlRKd89er7Gk=";
+    patches = [];
+    self_attribute_name = "nix_2_30";
+  };
+
+  nix_2_31 = common {
+    version = "2.31.5";
+    hash = "sha256-b7fhCXxl9qKTNPQvG8T/+nOxB95kalt9/aSY+ZSRctk=";
+    patches = [];
+    self_attribute_name = "nix_2_31";
+  };
+
+  nix_2_32 = common {
+    version = "2.32.8";
+    hash = "sha256-vj5o3dP9QaiW025a5INgg9j9XwScFsCYr6WrBxqSvUk=";
+    patches = [];
+    self_attribute_name = "nix_2_32";
+  };
+
+  nix_2_33 = common {
+    version = "2.33.6";
+    hash = "sha256-I3A0vFSFg3iI8tGBuQlAy7DzcxYcG39b06rfKOzGRvc=";
+    patches = [];
+    self_attribute_name = "nix_2_33";
+  };
+
+  nix_2_34 = common {
+    version = "2.34.7";
+    hash = "sha256-uj5KNW8Vdm60FCUxD2KsrCVH/WwoemvczWmmrb3Gvlo=";
+    patches = [];
+    self_attribute_name = "nix_2_34";
+  };
 }) {}

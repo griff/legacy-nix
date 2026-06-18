@@ -1,6 +1,10 @@
 {pkgs, ...}:
 {
+  lix_2_90 = {
+    version = "2.90.0";
+  };
   lix_2_91 = pkgs.lix.overrideAttrs {
+    version = "2.91.3";
     patches = [
       # Support for lowdown >= 1.4, https://gerrit.lix.systems/c/lix/+/3731
       (fetchpatch2 {
@@ -14,10 +18,19 @@
     meta.broken = true;
     meta.flake.exported = "lix_2_91";
   };
-
+  lix_2_92 = {
+    version = "2.92.3";
+  };
   lix_2_93 = pkgs.lix.overrideAttrs (finalAttrs: previousAttrs: {
+    version = "2.93.4";
     doCheck = false;
     doInstallCheck = false;
     meta.flake.exported = "lix_2_93";
   });
+  lix_2_94 = {
+    version = "2.94.2";
+  };
+  lix_2_95 = {
+    version = "2.95.3";
+  };
 }
