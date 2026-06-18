@@ -189,7 +189,6 @@ in {
     patches = [
       ./patches/install-nlohmann_json-headers.patch
     ];
-    meta.broken = true;
     self_attribute_name = "nix_2_4";
   };
 
@@ -200,7 +199,6 @@ in {
     patches = [
       ./patches/install-nlohmann_json-headers.patch
     ];
-    meta.broken = true;
     self_attribute_name = "nix_2_5";
   };
 
@@ -208,7 +206,6 @@ in {
     version = "2.6.1";
     hash = "sha256-E9iQ7f+9Z6xFcUvvfksTEfn8LsDfzmwrcRBC//5B3V0=";
     patches = [];
-    meta.broken = true;
     self_attribute_name = "nix_2_6";
   };
 
@@ -225,7 +222,6 @@ in {
         sha256 = "sha256-xz7QnWVCI12lX1+K/Zr9UpB93b10t1HS9y/5n5FYf8Q=";
       })
     ];
-    meta.broken = true;
     self_attribute_name = "nix_2_7";
   };
 
@@ -233,7 +229,6 @@ in {
     version = "2.8.1";
     hash = "sha256-zldZ4SiwkISFXxrbY/UdwooIZ3Z/I6qKxtpc3zD0T/o=";
     patches = [];
-    meta.broken = true;
     self_attribute_name = "nix_2_8";
   };
 
@@ -241,7 +236,6 @@ in {
     version = "2.9.2";
     hash = "sha256-uZCaBo9rdWRO/AlQMvVVjpAwzYijB2H5KKQqde6eHkg=";
     patches = [];
-    meta.broken = true;
     self_attribute_name = "nix_2_9";
   };
 
@@ -251,7 +245,6 @@ in {
     patches = [
       ./patches/flaky-tests.patch
     ];
-    meta.broken = true;
     self_attribute_name = "nix_2_10";
   };
 
@@ -322,7 +315,6 @@ in {
     version = "2.18.9";
     hash = "sha256-RrOFlDGmRXcVRV2p2HqHGqvzGNyWoD0Dado/BNlJ1SI=";
     patches = [];
-    meta.broken = true;
     self_attribute_name = "nix_2_18";
   };
 
@@ -330,7 +322,6 @@ in {
     version = "2.19.7";
     hash = "sha256-CkT1SNwRYYQdN2X4cTt1WX3YZfKZFWf7O1YTEo1APfc=";
     patches = [];
-    meta.broken = true;
     self_attribute_name = "nix_2_19";
   };
 
@@ -338,7 +329,6 @@ in {
     version = "2.20.9";
     hash = "sha256-b7smrbPLP/wcoBFCJ8j1UDNj0p4jiKT/6mNlDdlrOXA=";
     patches = [];
-    meta.broken = true;
     self_attribute_name = "nix_2_20";
   };
 
@@ -346,7 +336,6 @@ in {
     version = "2.21.5";
     hash = "sha256-/+TLpd6hvYMJFoeJvVZ+bZzjwY/jP6CxJRGmwKcXbI0=";
     patches = [];
-    meta.broken = true;
     self_attribute_name = "nix_2_21";
   };
 
@@ -354,7 +343,6 @@ in {
     version = "2.22.4";
     hash = "sha256-JWjJzMA+CeyImMgP2dhSBHQW4CS8wg7fc2zQ4WdKuBo=";
     patches = [];
-    meta.broken = true;
     self_attribute_name = "nix_2_22";
   };
 
@@ -362,7 +350,6 @@ in {
     version = "2.23.4";
     hash = "sha256-rugH4TUicHEdVfy3UuAobFIutqbuVco8Yg/z81g7clE=";
     patches = [];
-    meta.broken = true;
     self_attribute_name = "nix_2_23";
   };
 

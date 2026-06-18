@@ -22,14 +22,7 @@ let
   atLeast220 = lib.versionAtLeast version "2.20pre";
   atLeast221 = lib.versionAtLeast version "2.21pre";
   atLeast224 = lib.versionAtLeast version "2.24pre";
-  # Major.minor versions unaffected by CVE-2024-27297
-  unaffectedByFodSandboxEscape = [
-    "2.3"
-    "2.16"
-    "2.18"
-    "2.19"
-    "2.20"
-  ];
+
 in
 { stdenv
 , autoconf-archive
@@ -318,7 +311,6 @@ self = stdenv.mkDerivation {
     platforms = platforms.unix;
     outputsToInstall = [ "out" ];
     mainProgram = "nix";
-    knownVulnerabilities = lib.optional (!builtins.elem (lib.versions.majorMinor version) unaffectedByFodSandboxEscape && !atLeast221) "CVE-2024-27297";
     flake = {exported = self_attribute_name; };
   } // meta;
 };
