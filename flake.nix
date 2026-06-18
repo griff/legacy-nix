@@ -16,7 +16,8 @@
         lix = (import ./lix { inherit pkgs self; });
         packages = lib.mapAttrs' (n: drv: lib.nameValuePair drv.meta.flake.exported drv) 
           (lib.filterAttrs (n: v: lib.isDerivation v) nix);
-      in packages
+        proxyPackages = (import ./proxy { inherit pkgs lib self packages; });
+      in packages // proxyPackages
     );
     devShells = forAllSystems (system: let
         pkgs = nixpkgs.legacyPackages.${system};

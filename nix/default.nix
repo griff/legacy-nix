@@ -164,7 +164,6 @@ in {
     hash = "sha256-jBz2Ub65eFYG+aWgSI3AJYvLSghio77fWQiIW1svA9U=";
     patches = [
       patch-monitorfdhup
-      ./proxy-patches/nix-2_3.patch
     ];
     self_attribute_name = "nix_2_3";
     maintainers = with lib.maintainers; [ flokli ];
@@ -180,7 +179,6 @@ in {
     # https://github.com/NixOS/nix/pull/5537
     patches = [
       ./patches/install-nlohmann_json-headers.patch
-      ./proxy-patches/nix-2_3.patch
     ];
     meta.broken = true;
     self_attribute_name = "nix_2_4";
@@ -192,7 +190,6 @@ in {
     # https://github.com/NixOS/nix/pull/5536
     patches = [
       ./patches/install-nlohmann_json-headers.patch
-      ./proxy-patches/nix-2_3.patch
     ];
     meta.broken = true;
     self_attribute_name = "nix_2_5";
@@ -201,9 +198,7 @@ in {
   nix_2_6 = common {
     version = "2.6.1";
     hash = "sha256-E9iQ7f+9Z6xFcUvvfksTEfn8LsDfzmwrcRBC//5B3V0=";
-    patches = [
-      ./proxy-patches/nix-2_3.patch
-    ];
+    patches = [];
     meta.broken = true;
     self_attribute_name = "nix_2_6";
   };
@@ -220,7 +215,6 @@ in {
         url = "https://github.com/NixOS/nix/commit/c9afca59e87afe7d716101e6a75565b4f4b631f7.patch";
         sha256 = "sha256-xz7QnWVCI12lX1+K/Zr9UpB93b10t1HS9y/5n5FYf8Q=";
       })
-      ./proxy-patches/nix-2_3.patch
     ];
     meta.broken = true;
     self_attribute_name = "nix_2_7";
@@ -229,9 +223,7 @@ in {
   nix_2_8 = common {
     version = "2.8.1";
     hash = "sha256-zldZ4SiwkISFXxrbY/UdwooIZ3Z/I6qKxtpc3zD0T/o=";
-    patches = [
-      ./proxy-patches/nix-2_3.patch
-    ];
+    patches = [];
     meta.broken = true;
     self_attribute_name = "nix_2_8";
   };
@@ -239,9 +231,7 @@ in {
   nix_2_9 = common {
     version = "2.9.2";
     hash = "sha256-uZCaBo9rdWRO/AlQMvVVjpAwzYijB2H5KKQqde6eHkg=";
-    patches = [
-      ./proxy-patches/nix-2_3.patch
-    ];
+    patches = [];
     meta.broken = true;
     self_attribute_name = "nix_2_9";
   };
@@ -252,7 +242,6 @@ in {
     hash = "sha256-/8zlkXoZEZd+LgJq5xw8h+u2STqeKLrGTARZklE3CP8=";
     patches = [
       ./patches/flaky-tests.patch
-      ./proxy-patches/nix-2_3.patch
     ];
     meta.broken = true;
     self_attribute_name = "nix_2_10";
@@ -269,9 +258,7 @@ in {
   nix_2_18 = common {
     version = "2.18.9";
     hash = "sha256-RrOFlDGmRXcVRV2p2HqHGqvzGNyWoD0Dado/BNlJ1SI=";
-    patches = [
-      ./proxy-patches/nix-2_3.patch
-    ];
+    patches = [];
     meta.broken = true;
     self_attribute_name = "nix_2_18";
   };
@@ -279,9 +266,7 @@ in {
   nix_2_19 = common {
     version = "2.19.7";
     hash = "sha256-CkT1SNwRYYQdN2X4cTt1WX3YZfKZFWf7O1YTEo1APfc=";
-    patches = [
-      ./proxy-patches/nix-2_3.patch
-    ];
+    patches = [];
     meta.broken = true;
     self_attribute_name = "nix_2_19";
   };
@@ -289,9 +274,7 @@ in {
   nix_2_20 = common {
     version = "2.20.9";
     hash = "sha256-b7smrbPLP/wcoBFCJ8j1UDNj0p4jiKT/6mNlDdlrOXA=";
-    patches = [
-      ./proxy-patches/nix-2_3.patch
-    ];
+    patches = [];
     meta.broken = true;
     self_attribute_name = "nix_2_20";
   };
@@ -299,9 +282,7 @@ in {
   nix_2_21 = common {
     version = "2.21.5";
     hash = "sha256-/+TLpd6hvYMJFoeJvVZ+bZzjwY/jP6CxJRGmwKcXbI0=";
-    patches = [
-      ./proxy-patches/nix-2_3.patch
-    ];
+    patches = [];
     meta.broken = true;
     self_attribute_name = "nix_2_21";
   };
@@ -309,9 +290,7 @@ in {
   nix_2_22 = common {
     version = "2.22.4";
     hash = "sha256-JWjJzMA+CeyImMgP2dhSBHQW4CS8wg7fc2zQ4WdKuBo=";
-    patches = [
-      ./proxy-patches/nix-2_3.patch
-    ];
+    patches = [];
     meta.broken = true;
     self_attribute_name = "nix_2_22";
   };
@@ -319,9 +298,7 @@ in {
   nix_2_23 = common {
     version = "2.23.4";
     hash = "sha256-rugH4TUicHEdVfy3UuAobFIutqbuVco8Yg/z81g7clE=";
-    patches = [
-      ./proxy-patches/nix-2_3.patch
-    ];
+    patches = [];
     meta.broken = true;
     self_attribute_name = "nix_2_23";
   };
@@ -330,9 +307,7 @@ in {
   nix_2_24 = common {
     version = "2.24.14";
     hash = "sha256-SthMCsj6POjawLnJq9+lj/UzObX9skaeN1UGmMZiwTY=";
-    patches = [
-      ./proxy-patches/nix-2_24.patch
-    ];
+    patches = [];
     self_attribute_name = "nix_2_24";
   };
 
