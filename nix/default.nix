@@ -118,6 +118,14 @@ let
         libgit2 = if lib.versionAtLeast args.version "2.25.0" then libgit2-thin-packfile else libgit2;
       };
 
+  modular = { version, hash, self_attribute_name, maintainers ? [] }:
+    let
+      src = fetchFromGitHub { owner = "NixOS"; repo = "nix"; rev = version; inherit hash; };
+    in
+    import ./modular/packages.nix {
+      inherit lib pkgs version src self_attribute_name maintainers;
+    };
+
   # https://github.com/NixOS/nix/pull/7585
   patch-monitorfdhup = fetchpatch2 {
     name = "nix-7585-monitor-fd-hup.patch";
@@ -358,80 +366,69 @@ in {
     self_attribute_name = "nix_2_23";
   };
 
-  nix_2_24 = common {
+  nix_2_24 = modular {
     version = "2.24.15";
     hash = "sha256-GHqFHLxvRID2IEPUwIfRMp8epYQMFcvG9ogLzfWRbPc=";
-    patches = [];
     self_attribute_name = "nix_2_24";
   };
 
-  nix_2_25 = common {
+  nix_2_25 = modular {
     version = "2.25.5";
     hash = "sha256-9xrQhrqHCSqWsQveykZvG/ZMu0se66fUQw3xVSg6BpQ=";
-    patches = [];
     self_attribute_name = "nix_2_25";
   };
 
-  nix_2_26 = common {
+  nix_2_26 = modular {
     version = "2.26.4";
     hash = "sha256-WmGMiwwC9RLomNtpDeRoe5bqBAH84A6pLcqi1MbcQi4=";
-    patches = [];
     self_attribute_name = "nix_2_26";
   };
 
-  nix_2_27 = common {
+  nix_2_27 = modular {
     version = "2.27.1";
     hash = "sha256-rBPulEBpn4IiqkPsetuh7BRzT2iGCzZYnogTAsbrvhU=";
-    patches = [];
     self_attribute_name = "nix_2_27";
   };
 
-  nix_2_28 = common {
+  nix_2_28 = modular {
     version = "2.28.7";
     hash = "sha256-Fq4+7uYz6bdE1HvPqn+qZcYX1rNilVKT7YAAPLA8170=";
-    patches = [];
     self_attribute_name = "nix_2_28";
   };
 
-  nix_2_29 = common {
+  nix_2_29 = modular {
     version = "2.29.4";
     hash = "sha256-eVELGOeQg37AZLu7xnsaW9VA4fBr3x1d97I0iAoIt8A=";
-    patches = [];
     self_attribute_name = "nix_2_29";
   };
 
-  nix_2_30 = common {
+  nix_2_30 = modular {
     version = "2.30.5";
     hash = "sha256-tGiV71RxtCNcUNX86ZwmOIghG4pLwm5nlRKd89er7Gk=";
-    patches = [];
     self_attribute_name = "nix_2_30";
   };
 
-  nix_2_31 = common {
+  nix_2_31 = modular {
     version = "2.31.5";
     hash = "sha256-b7fhCXxl9qKTNPQvG8T/+nOxB95kalt9/aSY+ZSRctk=";
-    patches = [];
     self_attribute_name = "nix_2_31";
   };
 
-  nix_2_32 = common {
+  nix_2_32 = modular {
     version = "2.32.8";
     hash = "sha256-vj5o3dP9QaiW025a5INgg9j9XwScFsCYr6WrBxqSvUk=";
-    patches = [];
     self_attribute_name = "nix_2_32";
   };
 
-  nix_2_33 = common {
+  nix_2_33 = modular {
     version = "2.33.6";
     hash = "sha256-I3A0vFSFg3iI8tGBuQlAy7DzcxYcG39b06rfKOzGRvc=";
-    patches = [];
     self_attribute_name = "nix_2_33";
   };
 
-  nix_2_34 = common {
+  nix_2_34 = modular {
     version = "2.34.7";
     hash = "sha256-uj5KNW8Vdm60FCUxD2KsrCVH/WwoemvczWmmrb3Gvlo=";
-    patches = [];
     self_attribute_name = "nix_2_34";
   };
 }) {}
