@@ -1,0 +1,35 @@
+Adapt lowdown opts struct initialization for lowdown >= 3.0.0 (nix 2.9–2.11)
+
+Same root cause as lowdown-opts-v1.patch: lowdown 3.0.0 moved cols/hmargin/
+vmargin into struct lowdown_opts_term inside an anonymous union, breaking C++20
+designated initializers.
+
+This variant applies to nix 2.9–2.11, which factor the window width into a
+local `int windowWidth` variable before computing opts.cols.
+
+--- a/src/libcmd/markdown.cc
++++ b/src/libcmd/markdown.cc
+@@ -11,15 +11,14 @@
+ {
+     int windowWidth = getWindowSize().second;
+
+-    struct lowdown_opts opts {
+-        .type = LOWDOWN_TERM,
+-        .maxdepth = 20,
+-        .cols = (size_t) std::max(windowWidth - 5, 60),
+-        .hmargin = 0,
+-        .vmargin = 0,
+-        .feat = LOWDOWN_COMMONMARK | LOWDOWN_FENCED | LOWDOWN_DEFLIST | LOWDOWN_TABLES,
+-        .oflags = 0,
+-    };
++    struct lowdown_opts_term opts_term = {};
++    opts_term.cols = (size_t) std::max(windowWidth - 5, 60);
++    struct lowdown_opts opts = {};
++    opts.type = LOWDOWN_TERM;
++    opts.term = opts_term;
++    opts.maxdepth = 20;
++    opts.feat = LOWDOWN_COMMONMARK | LOWDOWN_FENCED | LOWDOWN_DEFLIST | LOWDOWN_TABLES;
++    opts.oflags = 0;
+
+     auto doc = lowdown_doc_new(&opts);
+     if (!doc)

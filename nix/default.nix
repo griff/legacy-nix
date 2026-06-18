@@ -194,7 +194,9 @@ in {
   nix_2_9 = common {
     version = "2.9.2";
     hash = "sha256-uZCaBo9rdWRO/AlQMvVVjpAwzYijB2H5KKQqde6eHkg=";
-    patches = [];
+    patches = [
+      ./patches/lowdown-opts-v2.patch
+    ];
     self_attribute_name = "nix_2_9";
   };
 
@@ -203,6 +205,7 @@ in {
     hash = "sha256-B9EyDUz/9tlcWwf24lwxCFmkxuPTVW7HFYvp0C4xGbc=";
     patches = [
       ./patches/flaky-tests.patch
+      ./patches/lowdown-opts-v2.patch
     ];
     self_attribute_name = "nix_2_10";
   };
@@ -212,6 +215,7 @@ in {
     hash = "sha256-qCV65kw09AG+EkdchDPq7RoeBznX0Q6Qa4yzPqobdOk=";
     patches = [
       ./patches/flaky-tests.patch
+      ./patches/lowdown-opts-v2.patch
     ];
     self_attribute_name = "nix_2_11";
   };
