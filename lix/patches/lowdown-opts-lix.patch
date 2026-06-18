@@ -1,0 +1,27 @@
+Adapt lowdown opts struct initialization for lowdown >= 3.0.0 (lix 2.92–2.93)
+
+Same fix as lowdown-opts.patch but targeting the lix/libcmd/ source layout used
+from lix 2.92 onward (previously src/libcmd/). Uses 0-context (no surrounding
+context lines) so the patch applies to both lix 2.92 (which has nothing between
+the struct and auto doc) and lix 2.93 (which adds an if-shouldANSI block there).
+
+--- a/lix/libcmd/markdown.cc
++++ b/lix/libcmd/markdown.cc
+@@ -15,9 +15,8 @@
+-    struct lowdown_opts opts {
+-        .type = LOWDOWN_TERM,
+-        .maxdepth = 20,
+-        .cols = (size_t) std::max(windowWidth - 5, 60),
+-        .hmargin = 0,
+-        .vmargin = 0,
+-        .feat = LOWDOWN_COMMONMARK | LOWDOWN_FENCED | LOWDOWN_DEFLIST | LOWDOWN_TABLES,
+-        .oflags = LOWDOWN_TERM_NOLINK,
+-    };
++    struct lowdown_opts_term opts_term = {};
++    opts_term.cols = (size_t) std::max(windowWidth - 5, 60);
++    struct lowdown_opts opts = {};
++    opts.type = LOWDOWN_TERM;
++    opts.term = opts_term;
++    opts.maxdepth = 20;
++    opts.feat = LOWDOWN_COMMONMARK | LOWDOWN_FENCED | LOWDOWN_DEFLIST | LOWDOWN_TABLES;
++    opts.oflags = LOWDOWN_NORELLINK;
