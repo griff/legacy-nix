@@ -244,6 +244,7 @@ in {
     hash = "sha256-5aCmGZbsFcLIckCDfvnPD4clGPQI7qYAqHYlttN/Wkg=";
     patches = [
       ./patches/lowdown-opts-v3.patch
+      ./patches/libexpr-tests-rapidcheck-ldflags.patch
     ];
     self_attribute_name = "nix_2_14";
   };
@@ -253,6 +254,7 @@ in {
     hash = "sha256-sfFXbjC5iIdSAbctZIuFozxX0uux/KFBNr9oh33xINs=";
     patches = [
       ./patches/lowdown-opts-v3.patch
+      ./patches/libexpr-tests-rapidcheck-ldflags.patch
     ];
     self_attribute_name = "nix_2_15";
   };

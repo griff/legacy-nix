@@ -1,0 +1,21 @@
+Add missing -lrapidcheck linker flag to libexpr-tests (nix 2.14–2.15)
+
+nix 2.14 introduced rapidcheck as a property-test dependency and added it to
+buildInputs, but forgot to add -lrapidcheck to libexpr-tests_LDFLAGS in
+src/libexpr/tests/local.mk. The same flag was correctly present in
+libstore-tests/local.mk and libutils-tests/local.mk from the start.
+
+Without this flag the libexpr-tests binary fails to link on macOS (where the
+linker does not search transitively) with:
+  ld: symbol(s) not found for architecture x86_64: _rapidcheck::*
+
+Fixed upstream in nix 2.16.
+
+--- a/src/libexpr/tests/local.mk
++++ b/src/libexpr/tests/local.mk
+@@ -16,4 +16,4 @@
+
+ libexpr-tests_LIBS = libstore-tests libutils-tests libexpr libutil libstore libfetchers
+
+-libexpr-tests_LDFLAGS := $(GTEST_LIBS) -lgmock
++libexpr-tests_LDFLAGS := -lrapidcheck $(GTEST_LIBS) -lgmock
