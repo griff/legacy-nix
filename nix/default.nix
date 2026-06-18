@@ -225,6 +225,7 @@ in {
     hash = "sha256-GmHKhq0uFtdOiJnuBwj2YwlZjvh6YTkfQZgeu4e0dLU=";
     patches = [
       ./patches/flaky-tests.patch
+      ./patches/lowdown-opts-v3.patch
     ];
     self_attribute_name = "nix_2_12";
   };
@@ -234,6 +235,7 @@ in {
     hash = "sha256-pd2yGmHWn4njfbrSP6cMJx8qL+yeGieqcbLNICzcRFs=";
     patches = [
       ./patches/flaky-tests.patch
+      ./patches/lowdown-opts-v3.patch
     ];
     self_attribute_name = "nix_2_13";
   };
@@ -243,6 +245,7 @@ in {
     hash = "sha256-5aCmGZbsFcLIckCDfvnPD4clGPQI7qYAqHYlttN/Wkg=";
     patches = [
       ./patches/flaky-tests.patch
+      ./patches/lowdown-opts-v3.patch
     ];
     self_attribute_name = "nix_2_14";
   };
@@ -252,6 +255,7 @@ in {
     hash = "sha256-sfFXbjC5iIdSAbctZIuFozxX0uux/KFBNr9oh33xINs=";
     patches = [
       ./patches/flaky-tests.patch
+      ./patches/lowdown-opts-v3.patch
     ];
     self_attribute_name = "nix_2_15";
   };
@@ -261,6 +265,7 @@ in {
     hash = "sha256-/tnjRCk+VaWPThzdn3C0zU1AMON+7AFsHgTTzErFxV4=";
     patches = [
       ./patches/flaky-tests.patch
+      ./patches/lowdown-opts-v3.patch
     ];
     self_attribute_name = "nix_2_16";
   };
@@ -270,6 +275,7 @@ in {
     hash = "sha256-D5dgV4B7y5tD+nPU0Yus+R9nqgAelvm8imEeFzITLJA=";
     patches = [
       ./patches/flaky-tests.patch
+      ./patches/lowdown-opts-v3.patch
     ];
     self_attribute_name = "nix_2_17";
   };
@@ -277,42 +283,54 @@ in {
   nix_2_18 = common {
     version = "2.18.9";
     hash = "sha256-RrOFlDGmRXcVRV2p2HqHGqvzGNyWoD0Dado/BNlJ1SI=";
-    patches = [];
+    patches = [
+      ./patches/lowdown-opts-v3.patch
+    ];
     self_attribute_name = "nix_2_18";
   };
 
   nix_2_19 = common {
     version = "2.19.7";
     hash = "sha256-CkT1SNwRYYQdN2X4cTt1WX3YZfKZFWf7O1YTEo1APfc=";
-    patches = [];
+    patches = [
+      ./patches/lowdown-opts-v3.patch
+    ];
     self_attribute_name = "nix_2_19";
   };
 
   nix_2_20 = common {
     version = "2.20.9";
     hash = "sha256-b7smrbPLP/wcoBFCJ8j1UDNj0p4jiKT/6mNlDdlrOXA=";
-    patches = [];
+    patches = [
+      ./patches/lowdown-opts-v3.patch
+    ];
     self_attribute_name = "nix_2_20";
   };
 
   nix_2_21 = common {
     version = "2.21.5";
     hash = "sha256-/+TLpd6hvYMJFoeJvVZ+bZzjwY/jP6CxJRGmwKcXbI0=";
-    patches = [];
+    patches = [
+      ./patches/lowdown-opts-v3.patch
+    ];
     self_attribute_name = "nix_2_21";
   };
 
   nix_2_22 = common {
     version = "2.22.4";
     hash = "sha256-JWjJzMA+CeyImMgP2dhSBHQW4CS8wg7fc2zQ4WdKuBo=";
-    patches = [];
+    patches = [
+      ./patches/lowdown-opts-v3.patch
+    ];
     self_attribute_name = "nix_2_22";
   };
 
   nix_2_23 = common {
     version = "2.23.4";
     hash = "sha256-rugH4TUicHEdVfy3UuAobFIutqbuVco8Yg/z81g7clE=";
-    patches = [];
+    patches = [
+      ./patches/lowdown-opts-v3.patch
+    ];
     self_attribute_name = "nix_2_23";
   };
 

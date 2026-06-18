@@ -1,0 +1,38 @@
+Adapt lowdown opts struct initialization for lowdown >= 3.0.0 (nix 2.12–2.23)
+
+Same root cause as lowdown-opts-v1.patch: lowdown 3.0.0 moved cols/hmargin/
+vmargin into struct lowdown_opts_term inside an anonymous union, breaking C++20
+designated initializers.
+
+Additionally, lowdown 3.0.0 removed the LOWDOWN_TERM_NOLINK flag entirely,
+replacing it with LOWDOWN_NORELLINK. This patch substitutes the new flag.
+
+Applies to nix 2.12–2.23, which use the window-width variable style and also
+set opts.oflags = LOWDOWN_TERM_NOLINK.
+
+--- a/src/libcmd/markdown.cc
++++ b/src/libcmd/markdown.cc
+@@ -11,15 +11,14 @@
+ {
+     int windowWidth = getWindowSize().second;
+
+-    struct lowdown_opts opts {
+-        .type = LOWDOWN_TERM,
+-        .maxdepth = 20,
+-        .cols = (size_t) std::max(windowWidth - 5, 60),
+-        .hmargin = 0,
+-        .vmargin = 0,
+-        .feat = LOWDOWN_COMMONMARK | LOWDOWN_FENCED | LOWDOWN_DEFLIST | LOWDOWN_TABLES,
+-        .oflags = LOWDOWN_TERM_NOLINK,
+-    };
++    struct lowdown_opts_term opts_term = {};
++    opts_term.cols = (size_t) std::max(windowWidth - 5, 60);
++    struct lowdown_opts opts = {};
++    opts.type = LOWDOWN_TERM;
++    opts.term = opts_term;
++    opts.maxdepth = 20;
++    opts.feat = LOWDOWN_COMMONMARK | LOWDOWN_FENCED | LOWDOWN_DEFLIST | LOWDOWN_TABLES;
++    opts.oflags = LOWDOWN_NORELLINK;
+
+     auto doc = lowdown_doc_new(&opts);
+     if (!doc)
