@@ -37,10 +37,6 @@
 
   nix-functional-tests,
 
-  nix-manual,
-  nix-internal-api-docs,
-  nix-external-api-docs,
-
   nix-perl-bindings,
 
   testers,
@@ -80,14 +76,6 @@ let
           ;
       };
 
-  devdoc = buildEnv {
-    name = "nix-${nix-cli.version}-devdoc";
-    paths = [
-      nix-internal-api-docs
-      nix-external-api-docs
-    ];
-  };
-
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nix";
@@ -98,16 +86,11 @@ stdenv.mkDerivation (finalAttrs: {
     have been provided directly by the constituent component that provides it.
 
     This is because not all tooling handles packages composed of arbitrary
-    outputs yet. This includes nix itself, https://github.com/NixOS/nix/issues/6507.
-
-    `devdoc` is also available, but not listed here, because this attribute is
-    not an output of the same derivation that provides `out`, `dev`, etc.
+    outputs yet. This includes nix itself, https://github.com/NixOS/nix/issues/6507
   */
   outputs = [
     "out"
     "dev"
-    "doc"
-    "man"
   ];
 
   /**
@@ -173,10 +156,6 @@ stdenv.mkDerivation (finalAttrs: {
       for lib in ${lib.escapeShellArgs devPaths}; do
         lndir $lib $dev
       done
-
-      # Forwarded outputs
-      ln -sT ${nix-manual} $doc
-      ln -sT ${nix-manual.man} $man
     '';
 
   passthru = {
@@ -204,13 +183,6 @@ stdenv.mkDerivation (finalAttrs: {
     inherit libs;
 
     /**
-      Developer documentation for `nix`, in `share/doc/nix/{internal,external}-api/`.
-
-      This is not a proper output; see `outputs` for context.
-    */
-    inherit devdoc;
-
-    /**
       Extra tests that test this package, but do not run as part of the build.
       See <https://nixos.org/manual/nixpkgs/stable/index.html#var-passthru-tests>
     */
@@ -231,7 +203,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = nix-cli.meta.platforms;
     outputsToInstall = [
       "out"
-      "man"
     ];
     pkgConfigModules = [
       "nix-cmd"

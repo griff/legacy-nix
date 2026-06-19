@@ -373,10 +373,6 @@ in
 
   nix-functional-tests = callPackage ../tests/functional/package.nix { };
 
-  nix-manual = callPackage ../doc/manual/package.nix { };
-  nix-internal-api-docs = callPackage ../src/internal-api-docs/package.nix { };
-  nix-external-api-docs = callPackage ../src/external-api-docs/package.nix { };
-
   nix-perl-bindings = callPackage ../src/perl/package.nix { };
 
   nix-everything = callPackage ../packaging/everything.nix { } // {
