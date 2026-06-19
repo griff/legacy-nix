@@ -1,4 +1,4 @@
-From e385cadec43e625fdc156385d8e3ee6b3f796e86 Mon Sep 17 00:00:00 2001
+From 07218321fbd00254c0f26586293ceb112d51b587 Mon Sep 17 00:00:00 2001
 From: Brian Olsen <brian@maven-group.org>
 Date: Tue, 22 Apr 2025 02:00:21 +0200
 Subject: [PATCH] Get NAR from store in daemon
@@ -21,5 +21,5 @@ index 9002a89bc..652bca4af 100644
      }
  
 -- 
-2.47.2
+2.50.1
 
