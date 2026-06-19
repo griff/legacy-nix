@@ -173,7 +173,6 @@ in {
       ./patches/nix-2.3-boost-system.patch
     ];
     self_attribute_name = "nix_2_3";
-    maintainers = with lib.maintainers; [ flokli ];
   }).override { boehmgc = boehmgc-nix_2_3; }).overrideAttrs {
     # https://github.com/NixOS/nix/issues/10222
     # spurious test/add.sh failures
