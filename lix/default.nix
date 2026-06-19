@@ -26,7 +26,7 @@ let
     , srcFn ? fetchFromGitHub
     , cargoDepsHash ? null
     , docCargoDepsHash ? null
-    , attr_name
+    , self_attribute_name
     , patches ? []
     }:
     let
@@ -66,7 +66,7 @@ let
       patches = (old.patches or [])
         ++ lib.optionals before92 [ ./patches/lowdown-opts.patch ]
         ++ lib.optionals (!before92 && before94) [ ./patches/lowdown-opts-lix.patch ];
-      meta = old.meta // { flake.exported = attr_name; };
+      meta = old.meta // { flake.exported = self_attribute_name; };
     });
 in
 {
@@ -74,21 +74,21 @@ in
     version = "2.90.0";
     hash = "sha256-f8k+BezKdJfmE+k7zgBJiohtS3VkkriycdXYsKOm3sc=";
     docCargoDepsHash = "sha256-VPcrf78gfLlkTRrcbLkPgLOk0o6lsOJBm6HYLvavpNU=";
-    attr_name = "lix_2_90";
+    self_attribute_name = "lix_2_90";
   };
 
   lix_2_91 = makeLix {
     version = "2.91.3";
     hash = "sha256-b5d+HnPcyHz0ZJW1+LZl4qm4LGTB/TiaDFQVlVL2xpE=";
     docCargoDepsHash = "sha256-U820gvcbQIBaFr2OWPidfFIDXycDFGgXX1NpWDDqENs=";
-    attr_name = "lix_2_91";
+    self_attribute_name = "lix_2_91";
   };
 
   lix_2_92 = makeLix {
     version = "2.92.3";
     hash = "sha256-iP2iUDxA99RcgQyZROs7bQw8pqxa1vFudRqjAIHg9Iw=";
     cargoDepsHash = "sha256-YMyNOXdlx0I30SkcmdW/6DU0BYc3ZOa2FMJSKMkr7I8=";
-    attr_name = "lix_2_92";
+    self_attribute_name = "lix_2_92";
   };
 
   lix_2_93 = makeLix {
@@ -96,7 +96,7 @@ in
     srcFn = args: fetchFromGitea ({ domain = "git.lix.systems"; } // args);
     hash = "sha256-J4ycLoXHPsoBoQtEXFCelL4xlq5pT8U9tNWNKm43+YI=";
     cargoDepsHash = "sha256-YMyNOXdlx0I30SkcmdW/6DU0BYc3ZOa2FMJSKMkr7I8=";
-    attr_name = "lix_2_93";
+    self_attribute_name = "lix_2_93";
   };
 
   lix_2_94 = makeLix {
@@ -104,7 +104,7 @@ in
     srcFn = args: fetchFromGitea ({ domain = "git.lix.systems"; } // args);
     hash = "sha256-Nmqsl/YCnBW5U3TUfFWHGVUbyS2/Ll655BAE3qZilC4=";
     cargoDepsHash = "sha256-APm8m6SVEAO17BBCka13u85/87Bj+LePP7Y3zHA3Mpg=";
-    attr_name = "lix_2_94";
+    self_attribute_name = "lix_2_94";
   };
 
   lix_2_95 = makeLix {
@@ -112,6 +112,6 @@ in
     srcFn = args: fetchFromGitea ({ domain = "git.lix.systems"; } // args);
     hash = "sha256-nFxJMIdcGTI9NiHAa5HZ2BmcGFLwC2pTq+V4Gjc499I=";
     cargoDepsHash = "sha256-a5XtutX+NS4wOqxeqbscWZMs99teKick5+cQfbCRGxQ=";
-    attr_name = "lix_2_95";
+    self_attribute_name = "lix_2_95";
   };
 }
