@@ -1,0 +1,25 @@
+From 236f25ab95c968edb3dad27d0a604100bb38f737 Mon Sep 17 00:00:00 2001
+From: Brian Olsen <brian@maven-group.org>
+Date: Fri, 19 Jun 2026 19:09:00 +0200
+Subject: [PATCH] fix for LOWDOWN_TERM_NOLINK rename to LOWDOWN_NORELLINK
+
+---
+ src/libcmd/markdown.cc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/libcmd/markdown.cc b/src/libcmd/markdown.cc
+index 4566e6ba6..3491890dd 100644
+--- a/src/libcmd/markdown.cc
++++ b/src/libcmd/markdown.cc
+@@ -36,7 +36,7 @@ static std::string doRenderMarkdownToTerminal(std::string_view markdown)
+         .vmargin = 0,
+ #endif
+         .feat = LOWDOWN_COMMONMARK | LOWDOWN_FENCED | LOWDOWN_DEFLIST | LOWDOWN_TABLES,
+-        .oflags = LOWDOWN_TERM_NOLINK,
++        .oflags = LOWDOWN_NORELLINK,
+     };
+ 
+     auto doc = lowdown_doc_new(&opts);
+-- 
+2.50.1
+

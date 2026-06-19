@@ -379,12 +379,18 @@ in {
   nix_2_24 = commonAutoconf {
     version = "2.24.15";
     hash = "sha256-GHqFHLxvRID2IEPUwIfRMp8epYQMFcvG9ogLzfWRbPc=";
+    patches = [
+      ./patches/lowdown-opts-v4.patch
+    ];
     self_attribute_name = "nix_2_24";
   };
 
   nix_2_25 = commonAutoconf {
     version = "2.25.5";
     hash = "sha256-9xrQhrqHCSqWsQveykZvG/ZMu0se66fUQw3xVSg6BpQ=";
+    patches = [
+      ./patches/lowdown-opts-v4.patch
+    ];
     self_attribute_name = "nix_2_25";
   };
 
