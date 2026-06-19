@@ -1,0 +1,133 @@
+--- a/src/libutil/json-utils.hh
++++ b/src/libutil/json-utils.hh
+@@ -4,6 +4,7 @@
+ #include <nlohmann/json.hpp>
+ #include <list>
+ 
++#include "error.hh"
+ #include "types.hh"
+ 
+ namespace nix {
+@@ -34,7 +35,26 @@
+ const nlohmann::json::object_t & getObject(const nlohmann::json & value);
+ const nlohmann::json::array_t & getArray(const nlohmann::json & value);
+ const nlohmann::json::string_t & getString(const nlohmann::json & value);
+-const nlohmann::json::number_integer_t & getInteger(const nlohmann::json & value);
++const nlohmann::json::number_unsigned_t & getUnsigned(const nlohmann::json & value);
++
++template<typename T>
++auto getInteger(const nlohmann::json & value) -> std::enable_if_t<std::is_signed_v<T> && std::is_integral_v<T>, T>
++{
++    if (auto ptr = value.get_ptr<const nlohmann::json::number_unsigned_t *>()) {
++        if (*ptr <= std::make_unsigned_t<T>(std::numeric_limits<T>::max())) {
++            return *ptr;
++        }
++    } else if (auto ptr = value.get_ptr<const nlohmann::json::number_integer_t *>()) {
++        if (*ptr >= std::numeric_limits<T>::min() && *ptr <= std::numeric_limits<T>::max()) {
++            return *ptr;
++        }
++    } else {
++        auto typeName = value.is_number_float() ? "floating point number" : value.type_name();
++        throw Error("Expected JSON value to be an integral number but it is of type '%s': %s", typeName, value.dump());
++    }
++    throw Error("Out of range: JSON value '%s' cannot be casted to %d-bit integer", value.dump(), 8 * sizeof(T));
++}
++
+ const nlohmann::json::boolean_t & getBoolean(const nlohmann::json & value);
+ Strings getStringList(const nlohmann::json & value);
+ StringMap getStringMap(const nlohmann::json & value);
+--- a/src/libutil/json-utils.cc
++++ b/src/libutil/json-utils.cc
+@@ -82,9 +82,17 @@
+     return ensureType(value, nlohmann::json::value_t::string).get_ref<const nlohmann::json::string_t &>();
+ }
+ 
+-const nlohmann::json::number_integer_t & getInteger(const nlohmann::json & value)
++const nlohmann::json::number_unsigned_t & getUnsigned(const nlohmann::json & value)
+ {
+-    return ensureType(value, nlohmann::json::value_t::number_integer).get_ref<const nlohmann::json::number_integer_t &>();
++    if (auto ptr = value.get<const nlohmann::json::number_unsigned_t *>()) {
++        return *ptr;
++    }
++    const char * typeName = value.type_name();
++    if (typeName == nlohmann::json(0).type_name()) {
++        typeName = value.is_number_float() ? "floating point number" : "signed integral number";
++    }
++    throw Error(
++        "Expected JSON value to be an unsigned integral number but it is of type '%s': %s", typeName, value.dump());
+ }
+ 
+ const nlohmann::json::boolean_t & getBoolean(const nlohmann::json & value)
+--- a/src/libstore/path-info.cc
++++ b/src/libstore/path-info.cc
+@@ -192,7 +192,7 @@
+ 
+     auto & json = getObject(_json);
+     res.narHash = Hash::parseAny(getString(valueAt(json, "narHash")), std::nullopt);
+-    res.narSize = getInteger(valueAt(json, "narSize"));
++    res.narSize = getUnsigned(valueAt(json, "narSize"));
+ 
+     try {
+         auto references = getStringList(valueAt(json, "references"));
+@@ -216,7 +216,7 @@
+ 
+     if (json.contains("registrationTime"))
+         if (auto * rawRegistrationTime = getNullable(valueAt(json, "registrationTime")))
+-            res.registrationTime = getInteger(*rawRegistrationTime);
++            res.registrationTime = getInteger<time_t>(*rawRegistrationTime);
+ 
+     if (json.contains("ultimate"))
+         res.ultimate = getBoolean(valueAt(json, "ultimate"));
+--- a/src/libstore/nar-info.cc
++++ b/src/libstore/nar-info.cc
+@@ -176,7 +176,7 @@
+             std::nullopt);
+ 
+     if (json.contains("downloadSize"))
+-        res.fileSize = getInteger(valueAt(json, "downloadSize"));
++        res.fileSize = getUnsigned(valueAt(json, "downloadSize"));
+ 
+     return res;
+ }
+--- a/src/libutil-tests/json-utils.cc
++++ b/src/libutil-tests/json-utils.cc
+@@ -130,19 +130,30 @@
+     ASSERT_THROW(getString(valueAt(json, "boolean")), Error);
+ }
+ 
+-TEST(getInteger, rightAssertions) {
+-    auto simple = R"({ "int": 0 })"_json;
++TEST(getIntegralNumber, rightAssertions) {
++    auto simple = R"({ "int": 0, "signed": -1 })"_json;
+ 
+-    ASSERT_EQ(getInteger(valueAt(getObject(simple), "int")), 0);
++    ASSERT_EQ(getUnsigned(valueAt(getObject(simple), "int")), 0u);
++    ASSERT_EQ(getInteger<int8_t>(valueAt(getObject(simple), "int")), 0);
++    ASSERT_EQ(getInteger<int8_t>(valueAt(getObject(simple), "signed")), -1);
+ }
+ 
+-TEST(getInteger, wrongAssertions) {
+-    auto json = R"({ "object": {}, "array": [], "string": "", "int": 0, "boolean": false })"_json;
++TEST(getIntegralNumber, wrongAssertions) {
++    auto json =
++        R"({ "object": {}, "array": [], "string": "", "int": 0, "signed": -256, "large": 128, "boolean": false })"_json;
+ 
+-    ASSERT_THROW(getInteger(valueAt(json, "object")), Error);
+-    ASSERT_THROW(getInteger(valueAt(json, "array")), Error);
+-    ASSERT_THROW(getInteger(valueAt(json, "string")), Error);
+-    ASSERT_THROW(getInteger(valueAt(json, "boolean")), Error);
++    ASSERT_THROW(getUnsigned(valueAt(json, "object")), Error);
++    ASSERT_THROW(getUnsigned(valueAt(json, "array")), Error);
++    ASSERT_THROW(getUnsigned(valueAt(json, "string")), Error);
++    ASSERT_THROW(getUnsigned(valueAt(json, "boolean")), Error);
++    ASSERT_THROW(getUnsigned(valueAt(json, "signed")), Error);
++
++    ASSERT_THROW(getInteger<int8_t>(valueAt(json, "object")), Error);
++    ASSERT_THROW(getInteger<int8_t>(valueAt(json, "array")), Error);
++    ASSERT_THROW(getInteger<int8_t>(valueAt(json, "string")), Error);
++    ASSERT_THROW(getInteger<int8_t>(valueAt(json, "boolean")), Error);
++    ASSERT_THROW(getInteger<int8_t>(valueAt(json, "large")), Error);
++    ASSERT_THROW(getInteger<int8_t>(valueAt(json, "signed")), Error);
+ }
+ 
+ TEST(getBoolean, rightAssertions) {
