@@ -164,6 +164,20 @@ let
   # different markdown.cc layout (no LOWDOWN_TERM_NORELLINK branch) and
   # never received an upstream backport.
   lowdown30PatchOld = ./patches/lowdown-3.0-compat-2.28-2.30.patch;
+
+  # Reworks getInteger into a template handling both signed and unsigned
+  # types, and adds getUnsigned.  Required for nix 2.26 and 2.27 because
+  # nlohmann/json 3.11+ stores JSON numbers without a sign bit as
+  # number_unsigned_t; the old code assumed all integers were
+  # number_integer_t and fails to compile against the newer header.
+  nlohmannFix = ./patches/nlohmann-json-getinteger-2.26-2.27.patch;
+
+  # Updates the expected output of the TOML timestamp functional test to
+  # match toml11's changed formatting: newer toml11 emits a space
+  # separator between date and time for offset-datetime values (odt4)
+  # instead of the RFC 3339 'T'.  Applies only to nix 2.26 and 2.27,
+  # which bundle an affected toml11 snapshot.
+  tomlTimestampsFix = ./patches/toml11-timestamps-2.26-2.27.patch;
 in {
   nix_2_3 = ((commonAutoconf {
     version = "2.3.18";
@@ -400,6 +414,8 @@ in {
     self_attribute_name = "nix_2_26";
     patches = patches_common ++ [
       lowdown30PatchOld
+      nlohmannFix
+      tomlTimestampsFix
     ];
   };
 
@@ -409,6 +425,8 @@ in {
     self_attribute_name = "nix_2_27";
     patches = patches_common ++ [
       lowdown30PatchOld
+      nlohmannFix
+      tomlTimestampsFix
     ];
   };
 
