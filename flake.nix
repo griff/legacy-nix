@@ -23,6 +23,7 @@
         buildInputs = with pkgs; [
           jujutsu
           nix-output-monitor
+          nix-diff
         ];
       };
     });
