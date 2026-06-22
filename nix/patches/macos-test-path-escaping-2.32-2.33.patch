@@ -1,0 +1,51 @@
+--- a/tests/functional/nix-shell.sh
++++ b/tests/functional/nix-shell.sh
+@@ -39,7 +39,9 @@
+ mkdir -p "$testTmpDir"
+ # shellcheck disable=SC2016
+ output=$(TMPDIR="$testTmpDir" nix-shell --pure "$shellDotNix" -A shellDrv --run 'echo $NIX_BUILD_TOP')
+-[[ "$output" =~ ${testTmpDir}.* ]] || {
++testTmpDir_ERE="${testTmpDir//./\\.}"
++testTmpDir_ERE="${testTmpDir_ERE//+/\\+}"
++[[ "$output" =~ ${testTmpDir_ERE}.* ]] || {
+     echo "expected $output =~ ${testTmpDir}.*" >&2
+     exit 1
+ }
+--- a/tests/functional/user-envs-test-case.sh
++++ b/tests/functional/user-envs-test-case.sh
+@@ -23,9 +23,9 @@
+ ] | all'
+ nix-env -f ./user-envs.nix -qa --json --out-path | jq -e '.[] | select(.name == "bar-0.1") | [
+     .outputName == "out",
+-    (.outputs.out | test("'"$NIX_STORE_DIR"'.*-0\\.1"))
++    (.outputs.out | test($ENV.NIX_STORE_DIR_ERE + ".*-0\\.1"))
+ ] | all'
+-nix-env -f ./user-envs.nix -qa --json --drv-path | jq -e '.[] | select(.name == "bar-0.1") | (.drvPath | test("'"$NIX_STORE_DIR"'.*-0\\.1\\.drv"))'
++nix-env -f ./user-envs.nix -qa --json --drv-path | jq -e '.[] | select(.name == "bar-0.1") | (.drvPath | test($ENV.NIX_STORE_DIR_ERE + ".*-0\\.1\\.drv"))'
+ 
+ # Query descriptions.
+ nix-env -f ./user-envs.nix -qa '*' --description | grepQuiet silly
+--- a/tests/functional/nix-profile.sh
++++ b/tests/functional/nix-profile.sh
+@@ -195,6 +195,7 @@
+ 
+ # Make another flake.
+ flake2Dir=$TEST_ROOT/flake2
++flake2Dir_URL="${flake2Dir//+/%2B}"
+ printf World > "$flake1Dir"/who
+ cp -r "$flake1Dir" "$flake2Dir"
+ printf World2 > "$flake2Dir"/who
+@@ -224,11 +225,11 @@
+        The conflicting packages have a priority of 5.
+        To prioritise the new package:
+ 
+-         nix profile add path:${flake2Dir}#packages.${system}.default --priority 4
++         nix profile add path:${flake2Dir_URL}#packages.${system}.default --priority 4
+ 
+        To prioritise the existing package:
+ 
+-         nix profile add path:${flake2Dir}#packages.${system}.default --priority 6
++         nix profile add path:${flake2Dir_URL}#packages.${system}.default --priority 6
+ EOF
+ )
+ [[ $("$TEST_HOME"/.nix-profile/bin/hello) = "Hello World" ]]

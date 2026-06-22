@@ -187,6 +187,24 @@ let
   # never received an upstream backport.
   lowdown30Patch2630 = ./patches/lowdown-3.0-compat-2.26-2.30.patch;
 
+  # Fixes functional test failures on macOS caused by the `+N` version suffix
+  # the modular packager appends when patches are present.  On macOS the full
+  # derivation-named build directory (including `+N`) appears in NIX_STORE_DIR
+  # and TEST_ROOT, so several test scripts misinterpret `+` as an ERE quantifier
+  # or compare literal paths against nix's URL-encoded output (which uses `%2B`).
+  #
+  # Structure: one common patch (vars.sh, repl.sh, dubious-query.sh — identical
+  # across all versions) plus one version-family patch for the files that differ
+  # per version (nix-shell.sh, user-envs-test-case.sh, nix-profile.sh, and in
+  # 2.34, the flakes/ tests).
+  #
+  # See: https://github.com/NixOS/nix/issues/14751
+  macosTestPathEscapingCommon  = ./patches/macos-test-path-escaping-common.patch;
+  macosTestPathEscaping229     = ./patches/macos-test-path-escaping-2.29.patch;
+  macosTestPathEscaping230231  = ./patches/macos-test-path-escaping-2.30-2.31.patch;
+  macosTestPathEscaping232233  = ./patches/macos-test-path-escaping-2.32-2.33.patch;
+  macosTestPathEscaping234     = ./patches/macos-test-path-escaping-2.34.patch;
+
   # Reworks getInteger into a template handling both signed and unsigned
   # types, and adds getUnsigned.  Required for nix 2.26 and 2.27 because
   # nlohmann/json 3.11+ stores JSON numbers without a sign bit as
@@ -467,6 +485,8 @@ in {
     self_attribute_name = "nix_2_29";
     patches = patches_common ++ [
       lowdown30Patch2630
+      macosTestPathEscapingCommon
+      macosTestPathEscaping229
     ];
   };
 
@@ -476,6 +496,8 @@ in {
     self_attribute_name = "nix_2_30";
     patches = patches_common ++ [
       lowdown30Patch2630
+      macosTestPathEscapingCommon
+      macosTestPathEscaping230231
     ];
   };
 
@@ -483,23 +505,39 @@ in {
     version = "2.31.5";
     hash = "sha256-b7fhCXxl9qKTNPQvG8T/+nOxB95kalt9/aSY+ZSRctk=";
     self_attribute_name = "nix_2_31";
+    patches = patches_common ++ [
+      macosTestPathEscapingCommon
+      macosTestPathEscaping230231
+    ];
   };
 
   nix_2_32 = modular {
     version = "2.32.8";
     hash = "sha256-vj5o3dP9QaiW025a5INgg9j9XwScFsCYr6WrBxqSvUk=";
     self_attribute_name = "nix_2_32";
+    patches = patches_common ++ [
+      macosTestPathEscapingCommon
+      macosTestPathEscaping232233
+    ];
   };
 
   nix_2_33 = modular {
     version = "2.33.6";
     hash = "sha256-I3A0vFSFg3iI8tGBuQlAy7DzcxYcG39b06rfKOzGRvc=";
     self_attribute_name = "nix_2_33";
+    patches = patches_common ++ [
+      macosTestPathEscapingCommon
+      macosTestPathEscaping232233
+    ];
   };
 
   nix_2_34 = modular {
     version = "2.34.7";
     hash = "sha256-uj5KNW8Vdm60FCUxD2KsrCVH/WwoemvczWmmrb3Gvlo=";
     self_attribute_name = "nix_2_34";
+    patches = [
+      macosTestPathEscapingCommon
+      macosTestPathEscaping234
+    ];
   };
 }) {}
