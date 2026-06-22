@@ -12,7 +12,7 @@
   proxyPackages = (import ./proxy { inherit pkgs lib packages; });
   all-packages = packages // proxyPackages;
 
-  selected = [ "nix_2_3" "nix_2_24" "lix_2_93"];
+  selected = [ "nix_2_3" "nix_2_24" "nix_2_34" "lix_2_91" "lix_2_93"];
   selected-nix = lib.getAttrs selected all-packages;
 
   isUnbroken = drv: (lib.isDerivation drv) && !(drv.meta.broken or false);
