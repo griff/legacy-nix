@@ -1,0 +1,13 @@
+--- a/src/libutil/unix-domain-socket.cc
++++ b/src/libutil/unix-domain-socket.cc
+@@ -95,6 +95,10 @@
+             errno = *errNo;
+             throw SysError("cannot %s to socket at '%s'", operationName, path);
+         }
++        // Release before ~Pid(): child exited after writing to pipe, but the
++        // SIGCHLD auto-reap handler (moved before socket creation in 2.34) may
++        // have already waitpid()'d it; ~Pid() getting ECHILD would std::terminate().
++        pid.release();
+ #endif
+     } else {
+         memcpy(addr.sun_path, path.c_str(), path.size() + 1);

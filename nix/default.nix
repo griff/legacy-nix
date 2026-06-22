@@ -205,6 +205,17 @@ let
   macosTestPathEscaping232233  = ./patches/macos-test-path-escaping-2.32-2.33.patch;
   macosTestPathEscaping234     = ./patches/macos-test-path-escaping-2.34.patch;
 
+  # Fixes an Abort trap 6 (std::terminate) during functional tests on macOS.
+  # The daemon socket path for secure-drv-outputs is exactly 104 bytes (the
+  # macOS sun_path limit), triggering bindConnectProcHelper's fork+chdir path.
+  # In 2.34 setSigChldAction(true) was moved before socket creation (was after
+  # in 2.33), so the SIGCHLD auto-reap handler can waitpid() the helper child
+  # before Pid::~Pid() does -- causing ECHILD, an exception in the destructor's
+  # function-try-block, implicit re-throw (C++ destructor FTB rule), and
+  # std::terminate().  The fix calls pid.release() once we know the child
+  # exited successfully, so ~Pid() never calls waitpid() on it.
+  macosSigchldBindHelper234 = ./patches/macos-sigchld-bind-helper-2.34.patch;
+
   # Reworks getInteger into a template handling both signed and unsigned
   # types, and adds getUnsigned.  Required for nix 2.26 and 2.27 because
   # nlohmann/json 3.11+ stores JSON numbers without a sign bit as
@@ -536,6 +547,7 @@ in {
     hash = "sha256-uj5KNW8Vdm60FCUxD2KsrCVH/WwoemvczWmmrb3Gvlo=";
     self_attribute_name = "nix_2_34";
     patches = [
+      macosSigchldBindHelper234
       macosTestPathEscapingCommon
       macosTestPathEscaping234
     ];
