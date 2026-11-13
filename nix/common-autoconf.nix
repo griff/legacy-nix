@@ -153,6 +153,15 @@ self = stdenv.mkDerivation {
 
   postPatch = ''
     patchShebangs --build tests
+  ''
+  # GCC 16's libstdc++ headers no longer pull in <cstdint> indirectly, and
+  # these versions use uint16_t/uint64_t without including it
+  # (src/libutil/json.cc, src/libstore/fs-accessor.hh, ...). Older
+  # versions' configure.ac starts with `CXXFLAGS=`, dropping env.CXXFLAGS,
+  # so add it to the Makefile.config template, which all of them have.
+  + ''
+    substituteInPlace Makefile.config.in \
+      --replace-fail "CXXFLAGS = @CXXFLAGS@" "CXXFLAGS = -include cstdint @CXXFLAGS@"
   '';
 
   preConfigure =
