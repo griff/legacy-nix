@@ -33,6 +33,7 @@ let
       before91 = lib.versionOlder version "2.91";
       before92 = lib.versionOlder version "2.92";
       before94 = lib.versionOlder version "2.94";
+      before95 = lib.versionOlder version "2.95";
       src = srcFn { owner = "lix-project"; repo = "lix"; rev = version; hash = hash; };
       outerArgs = { inherit version src patches; }
         // lib.optionalAttrs before92 {
@@ -66,6 +67,12 @@ let
       patches = (old.patches or [])
         ++ lib.optionals before92 [ ./patches/lowdown-opts.patch ]
         ++ lib.optionals (!before92 && before94) [ ./patches/lowdown-opts-lix.patch ];
+      # lix/libutil/processes.cc only includes <sys/syscall.h> on macOS and
+      # relied on getting it indirectly on Linux, which glibc 2.44 no longer
+      # does: "error: use of undeclared identifier 'SYS_capset'".
+      env = (old.env or { }) // lib.optionalAttrs (before95 && pkgs.stdenv.hostPlatform.isLinux) {
+        CXXFLAGS = toString [ (old.env.CXXFLAGS or "") "-include sys/syscall.h" ];
+      };
       meta = old.meta // { flake.exported = self_attribute_name; };
     });
 in
