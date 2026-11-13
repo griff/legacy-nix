@@ -91,8 +91,6 @@ self = stdenv.mkDerivation {
 
   outputs = [ "out" "dev" ];
 
-  hardeningEnable = lib.optionals (!stdenv.hostPlatform.isDarwin) [ "pie" ];
-
   hardeningDisable = [
     "shadowstack"
   ] ++ lib.optional stdenv.hostPlatform.isMusl "fortify";
