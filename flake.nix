@@ -2,7 +2,8 @@
   description = "Legacy Nix versions";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
+    #nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
+    nixpkgs.url = "https://nixos.org/channels/nixos-unstable/nixexprs.tar.zst";
     nix-progress = {
       url = "github:griff/nix-progress";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -14,7 +15,7 @@
     systems = ["x86_64-linux" "x86_64-darwin"];
     forAllSystems = lib.genAttrs systems;
   in {
-    packages = forAllSystems (system: 
+    packages = forAllSystems (system:
       import ./packages.nix {
         inherit lib;
         pkgs = nixpkgs.legacyPackages.${system};
@@ -28,6 +29,8 @@
           jujutsu
           nix-output-monitor
           nix-diff
+          nil
+          nixd
           nix-progress.packages.${system}.default
         ];
       };
